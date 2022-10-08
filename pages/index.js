@@ -2,6 +2,7 @@ import Head from "next/head";
 import styles from "@styles/Home.module.css";
 import { fetcher } from "@services/fetcher";
 import { Search } from "@components/Forms";
+import { Container } from "@components/Layout";
 
 const HomePage = () => {
   const hitAPI = fetcher("https://jsonplaceholder.typicode.com/todos").then(
@@ -15,8 +16,10 @@ const HomePage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main>
-        <h1 className="mb-4 font-bold text-center">Logo</h1>
-        <Search />
+        <Container>
+          <h1 className="mb-4 font-bold text-center">Logo</h1>
+          <Search />
+        </Container>
       </main>
     </div>
   );
