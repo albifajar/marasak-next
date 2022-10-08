@@ -1,14 +1,12 @@
-import Head from "next/head";
-import styles from "@styles/Home.module.css";
-import { fetcher } from "@services/fetcher";
-import { Search } from "@components/Forms";
-import { Container } from "@components/Layout";
-import { BottomMenu } from "@components/Footer";
+import Head from 'next/head'
+import styles from '@styles/Home.module.css'
+import { fetcher } from '@services/fetcher'
+import { Search } from '@components/Forms'
+import { Container } from '@components/Layout'
+import { BottomMenu } from '@components/Footer'
 
 const HomePage = () => {
-  const hitAPI = fetcher("https://jsonplaceholder.typicode.com/todos").then(
-    (data) => console.log(data)
-  );
+  const hitAPI = fetcher('https://jsonplaceholder.typicode.com/todos').then((data) => console.log(data))
   return (
     <div>
       <Head>
@@ -24,7 +22,7 @@ const HomePage = () => {
         <BottomMenu />
       </main>
     </div>
-  );
-};
+  )
+}
 
-export default HomePage;
+export default HomePage
