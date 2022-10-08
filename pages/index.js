@@ -15,7 +15,7 @@ const HomePage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main>
-        <h1 className="text-center font-bold mb-4">Marasak</h1>
+        <h1 className="mb-4 font-bold text-center">Logo</h1>
         <Search />
       </main>
     </div>

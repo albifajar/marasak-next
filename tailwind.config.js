@@ -7,5 +7,8 @@ module.exports = {
   theme: {
     extend: {},
   },
-  plugins: [],
+  plugins: [
+    require("tailwind-filter-utilities"),
+    require("@tailwindcss/forms"),
+  ],
 };
