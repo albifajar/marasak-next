@@ -1,6 +1,6 @@
-import { Container } from "@components/Layout";
-import Image from "next/image";
-import Link from "next/link";
+import { Container } from '@components/Layout'
+import Image from 'next/image'
+import Link from 'next/link'
 
 export const BottomMenu = () => {
   return (
@@ -9,43 +9,25 @@ export const BottomMenu = () => {
         <div>
           <Link href="/" passHref>
             <a>
-              <Image
-                src="/static/icons/home-icon.svg"
-                layout="fixed"
-                height={30}
-                width={30}
-                alt=""
-              />
+              <Image src="/static/icons/home-icon.svg" layout="fixed" height={30} width={30} alt="" />
             </a>
           </Link>
         </div>
         <div>
           <Link href="/recipes" passHref>
             <a>
-              <Image
-                src="/static/icons/book-icon.svg"
-                layout="fixed"
-                height={30}
-                width={30}
-                alt=""
-              />
+              <Image src="/static/icons/book-icon.svg" layout="fixed" height={30} width={30} alt="" />
             </a>
           </Link>
         </div>
         <div>
           <Link href="/profile" passHref>
             <a>
-              <Image
-                src="/static/icons/user-icon.svg"
-                layout="fixed"
-                height={30}
-                width={30}
-                alt=""
-              />
+              <Image src="/static/icons/user-icon.svg" layout="fixed" height={30} width={30} alt="" />
             </a>
           </Link>
         </div>
       </Container>
     </div>
-  );
-};
+  )
+}
