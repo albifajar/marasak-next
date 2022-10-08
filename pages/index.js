@@ -3,6 +3,7 @@ import styles from "@styles/Home.module.css";
 import { fetcher } from "@services/fetcher";
 import { Search } from "@components/Forms";
 import { Container } from "@components/Layout";
+import { BottomMenu } from "@components/Footer";
 
 const HomePage = () => {
   const hitAPI = fetcher("https://jsonplaceholder.typicode.com/todos").then(
@@ -20,6 +21,7 @@ const HomePage = () => {
           <h1 className="mb-4 font-bold text-center">Logo</h1>
           <Search />
         </Container>
+        <BottomMenu />
       </main>
     </div>
   );
