@@ -15,7 +15,7 @@ export const Search = () => {
           defaultValue={transcript}
           className="w-full px-12 py-3 border border-gray-400 rounded-md focus:border-blue-200"
         />
-        <button className="absolute right-2" onClick={SpeechRecognition.startListening}>
+        <button className="absolute right-2" onClick={() => SpeechRecognition.startListening({ language: 'id' })}>
           <MicrophoneIcon color={listening ? 'red' : 'black'} />
         </button>
       </div>
