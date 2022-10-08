@@ -4,6 +4,8 @@ import { fetcher } from '@services/fetcher'
 import { Search } from '@components/Forms'
 import { Container } from '@components/Layout'
 import { BottomMenu } from '@components/Footer'
+import { DefaultCard as Card } from '@components/Card'
+import Link from 'next/link'
 
 const HomePage = () => {
   const hitAPI = fetcher('https://jsonplaceholder.typicode.com/todos').then((data) => console.log(data))
@@ -18,6 +20,17 @@ const HomePage = () => {
         <Container>
           <h1 className="mb-4 font-bold text-center">Logo</h1>
           <Search />
+          <div className="grid grid-cols-2 gap-3 mt-4">
+            {[...Array(4)].map(() => (
+              <div key={Math.random()}>
+                <Link href="/recipes/slug" passHref>
+                  <a>
+                    <Card />
+                  </a>
+                </Link>
+              </div>
+            ))}
+          </div>
         </Container>
         <BottomMenu />
       </main>
