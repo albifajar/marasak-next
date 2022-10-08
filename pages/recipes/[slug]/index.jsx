@@ -73,7 +73,11 @@ const RecipeDetail = () => {
           </div>
 
           <div className="flex justify-center mt-12">
-            <button className="px-5 py-3 text-white bg-blue-600 rounded-md">Mulai Memasak</button>
+            <Link href="/cooking-step/slug" passHref>
+              <a>
+                <button className="px-5 py-3 text-white bg-blue-600 rounded-md">Mulai Memasak</button>
+              </a>
+            </Link>
           </div>
         </Container>
       </main>
