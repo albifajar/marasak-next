@@ -1,8 +1,8 @@
-import Head from "next/head";
-import styles from "@styles/Home.module.css";
-import { Search } from "@components/Forms";
-import { Container } from "@components/Layout";
-import { BottomMenu } from "@components/Footer";
+import Head from 'next/head'
+import styles from '@styles/Home.module.css'
+import { Search } from '@components/Forms'
+import { Container } from '@components/Layout'
+import { BottomMenu } from '@components/Footer'
 
 const Recipes = () => {
   return (
@@ -19,7 +19,7 @@ const Recipes = () => {
         <BottomMenu />
       </main>
     </div>
-  );
-};
+  )
+}
 
-export default Recipes;
+export default Recipes
