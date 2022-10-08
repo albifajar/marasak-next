@@ -5,6 +5,7 @@ import { Search } from '@components/Forms'
 import { Container } from '@components/Layout'
 import { BottomMenu } from '@components/Footer'
 import { DefaultCard as Card } from '@components/Card'
+import Link from 'next/link'
 
 const HomePage = () => {
   const hitAPI = fetcher('https://jsonplaceholder.typicode.com/todos').then((data) => console.log(data))
@@ -21,7 +22,13 @@ const HomePage = () => {
           <Search />
           <div className="grid grid-cols-2 gap-3 mt-4">
             {[...Array(4)].map(() => (
-              <Card key={Math.random()} />
+              <div key={Math.random()}>
+                <Link href="/recipes/slug" passHref>
+                  <a>
+                    <Card />
+                  </a>
+                </Link>
+              </div>
             ))}
           </div>
         </Container>
