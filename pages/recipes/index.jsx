@@ -1,8 +1,10 @@
 import Head from 'next/head'
-import styles from '@styles/Home.module.css'
-import { Search } from '@components/Forms'
-import { Container } from '@components/Layout'
+import Link from 'next/link'
+
+import { DefaultCard as Card } from '@components/Card'
 import { BottomMenu } from '@components/Footer'
+import { Container } from '@components/Layout'
+import { Search } from '@components/Forms'
 
 const Recipes = () => {
   return (
@@ -14,7 +16,20 @@ const Recipes = () => {
       </Head>
       <main className="pt-6">
         <Container>
-          <Search />
+          <div className="pt-4 pb-20">
+            <Search />
+            <div className="grid grid-cols-2 gap-3 mt-6">
+              {[...Array(6)].map(() => (
+                <div key={Math.random()}>
+                  <Link href="/recipes/slug" passHref>
+                    <a>
+                      <Card />
+                    </a>
+                  </Link>
+                </div>
+              ))}
+            </div>
+          </div>
         </Container>
         <BottomMenu />
       </main>

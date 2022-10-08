@@ -1,6 +1,6 @@
 import Head from 'next/head'
-import styles from '@styles/Home.module.css'
-import { fetcher } from '@services/fetcher'
+// import styles from '@styles/Home.module.css'
+// import { fetcher } from '@services/fetcher'
 import { Search } from '@components/Forms'
 import { Container } from '@components/Layout'
 import { BottomMenu } from '@components/Footer'
@@ -8,7 +8,7 @@ import { DefaultCard as Card } from '@components/Card'
 import Link from 'next/link'
 
 const HomePage = () => {
-  const hitAPI = fetcher('https://jsonplaceholder.typicode.com/todos').then((data) => console.log(data))
+  // const hitAPI = fetcher('https://jsonplaceholder.typicode.com/todos').then((data) => console.log(data))
   return (
     <div>
       <Head>
@@ -18,18 +18,20 @@ const HomePage = () => {
       </Head>
       <main>
         <Container>
-          <h1 className="mb-4 font-bold text-center">Logo</h1>
-          <Search />
-          <div className="grid grid-cols-2 gap-3 mt-4">
-            {[...Array(4)].map(() => (
-              <div key={Math.random()}>
-                <Link href="/recipes/slug" passHref>
-                  <a>
-                    <Card />
-                  </a>
-                </Link>
-              </div>
-            ))}
+          <div className="pt-10 pb-20">
+            <h1 className="mb-4 text-xl font-bold text-center">Logo</h1>
+            <Search />
+            <div className="grid grid-cols-2 gap-3 mt-6">
+              {[...Array(6)].map(() => (
+                <div key={Math.random()}>
+                  <Link href="/recipes/slug" passHref>
+                    <a>
+                      <Card />
+                    </a>
+                  </Link>
+                </div>
+              ))}
+            </div>
           </div>
         </Container>
         <BottomMenu />
