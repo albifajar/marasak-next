@@ -4,6 +4,7 @@ import { fetcher } from '@services/fetcher'
 import { Container } from '@components/Layout'
 import Image from 'next/image'
 import Link from 'next/link'
+import { ArrowLeft, Timer } from '@components/Icons'
 
 const RecipeDetail = ({ slug }) => {
   const [recipe, setRecipe] = useState({})
@@ -16,6 +17,7 @@ const RecipeDetail = ({ slug }) => {
   useEffect(() => {
     getRecipe()
     return
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
   return (
     <div>
@@ -30,7 +32,7 @@ const RecipeDetail = ({ slug }) => {
             <a>
               <div className="flex space-x-4">
                 <div>
-                  <Image src="/static/icons/arrow-left-icon.svg" layout="fixed" height={25} width={25} alt="" />
+                  <ArrowLeft />
                 </div>{' '}
                 <span className="-mt-0.5 text-xl">Kembali</span>{' '}
               </div>
@@ -76,7 +78,7 @@ const RecipeDetail = ({ slug }) => {
                     <span className="mr-4">{step?.description}</span>
                     {step?.timer > 0 && (
                       <span className="flex items-center">
-                        <Image src="/static/icons/timer-icon.svg" layout="fixed" height={20} width={20} alt="" />
+                        <Timer />
                       </span>
                     )}
                   </li>

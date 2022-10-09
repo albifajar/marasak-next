@@ -2,35 +2,10 @@ import { useSpeechSynthesis } from 'react-speech-kit'
 import { useState, useRef, useEffect } from 'react'
 import { Container } from '@components/Layout'
 import Countdown from 'react-countdown'
-import Image from 'next/image'
 import Head from 'next/head'
 import Link from 'next/link'
-import { ArrowLeft, ArrowLeftRounded, ArrowRightRounded, Repeat } from '@components/Icons'
+import { ArrowLeft, ArrowLeftRounded, ArrowRightRounded, Repeat, Timer } from '@components/Icons'
 import { fetcher } from '@services/fetcher'
-
-// const ListStep = [
-//   {
-//     description: 'Potong sosis yang sudah disiapkan ',
-//     timer: 0
-//   },
-//   {
-//     description: 'Potong sosis  bagian yang pipih',
-//     timer: 0
-//   },
-//   {
-//     description: 'Potong sosis yang sudah disiapkan menjadi bagian yang pipih',
-//     timer: 0
-//   },
-//   {
-//     description: 'Potong sosis yang sudah disiapkan menjadi bagian yang pipih jadi bagian yang pipi',
-//     timer: 0
-//   },
-//   {
-//     description:
-//       'Potong sosis yang sudah disiapkan menjadi bagian yang pipih  sosis yang sudah disiapkan menjadi bagian yang pipih',
-//     timer: 8000
-//   }
-// ]
 
 const CookingStepPage = ({ slug }) => {
   const [currentStep, setCurrentStep] = useState(0)
@@ -97,14 +72,16 @@ const CookingStepPage = ({ slug }) => {
   }
 
   const handleSpeak = () => {
-    speak({
-      default: true,
-      lang: 'id',
-      localService: true,
-      name: 'Karen',
-      voiceURI: 'Karen',
-      text: `${ListStep[currentStep].description}`
-    })
+    if (steps.length != 0) {
+      speak({
+        default: true,
+        lang: 'id',
+        localService: true,
+        name: 'Karen',
+        voiceURI: 'Karen',
+        text: `${steps[currentStep].description}`
+      })
+    }
   }
 
   useEffect(() => {
@@ -113,7 +90,9 @@ const CookingStepPage = ({ slug }) => {
   }, [changeStep, repeatStep])
 
   setTimeout(() => {
-    setChangeStep(ListStep[currentStep].description)
+    if (steps.length != 0) {
+      setChangeStep(steps[currentStep].description)
+    }
   }, 1000)
 
   const repeater = () => {
@@ -164,7 +143,7 @@ const CookingStepPage = ({ slug }) => {
                     </span>
                     <span className="flex items-center">
                       <button onClick={() => StartTimer()}>
-                        <Image src="/static/icons/timer-icon.svg" layout="fixed" height={30} width={30} alt="" />
+                        <Timer />
                       </button>
                     </span>{' '}
                   </p>
