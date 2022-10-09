@@ -1,39 +1,19 @@
-import Head from 'next/head'
-import { Container } from '@components/Layout'
-import Image from 'next/image'
-import Link from 'next/link'
-import { fetcher } from '@services/fetcher'
+import { useSpeechSynthesis } from 'react-speech-kit'
 import { useState, useRef, useEffect } from 'react'
+import { Container } from '@components/Layout'
 import Countdown from 'react-countdown'
-
-// const ListStep = [
-//   {
-//     description: 'Potong sosis yang sudah disiapkan ',
-//     timer: 0
-//   },
-//   {
-//     description: 'Potong sosis  bagian yang pipih',
-//     timer: 0
-//   },
-//   {
-//     description: 'Potong sosis yang sudah disiapkan menjadi bagian yang pipih',
-//     timer: 0
-//   },
-//   {
-//     description: 'Potong sosis yang sudah disiapkan menjadi bagian yang pipih jadi bagian yang pipi',
-//     timer: 0
-//   },
-//   {
-//     description:
-//       'Potong sosis yang sudah disiapkan menjadi bagian yang pipih  sosis yang sudah disiapkan menjadi bagian yang pipih',
-//     timer: 8000
-//   }
-// ]
+import Head from 'next/head'
+import Link from 'next/link'
+import { ArrowLeft, ArrowLeftRounded, ArrowRightRounded, Repeat, Timer } from '@components/Icons'
+import { fetcher } from '@services/fetcher'
 
 const CookingStepPage = ({ slug }) => {
   const [currentStep, setCurrentStep] = useState(0)
+  const [changeStep, setChangeStep] = useState('')
+  const [repeatStep, setRepeatStep] = useState('')
   const countdownRef = useRef(null)
   const audioRef = useRef(null)
+  const { speak } = useSpeechSynthesis()
 
   const [steps, setSteps] = useState([])
 
@@ -47,6 +27,7 @@ const CookingStepPage = ({ slug }) => {
   useEffect(() => {
     getRecipe()
     return
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const nextStep = () => {
@@ -90,6 +71,34 @@ const CookingStepPage = ({ slug }) => {
     countdownRef.current.start()
   }
 
+  const handleSpeak = () => {
+    if (steps.length != 0) {
+      speak({
+        default: true,
+        lang: 'id',
+        localService: true,
+        name: 'Karen',
+        voiceURI: 'Karen',
+        text: `${steps[currentStep].description}`
+      })
+    }
+  }
+
+  useEffect(() => {
+    handleSpeak()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [changeStep, repeatStep])
+
+  setTimeout(() => {
+    if (steps.length != 0) {
+      setChangeStep(steps[currentStep].description)
+    }
+  }, 1000)
+
+  const repeater = () => {
+    setRepeatStep(`${Math.random()}`)
+  }
+
   return (
     <div>
       <Head>
@@ -101,10 +110,10 @@ const CookingStepPage = ({ slug }) => {
         <div className="fixed w-full top-8">
           <Link href={`/recipes/${slug}`} passHref>
             <a className="flex justify-between w-11/12 mx-auto">
-              <div className="flex space-x-4">
+              <div className="flex items-center space-x-4">
                 <div>
-                  <Image src="/static/icons/arrow-left-icon.svg" layout="fixed" height={25} width={25} alt="" />
-                </div>{' '}
+                  <ArrowLeft />
+                </div>
                 <span className="-mt-0.5 text-xl">Selesai</span>{' '}
               </div>
             </a>
@@ -134,7 +143,7 @@ const CookingStepPage = ({ slug }) => {
                     </span>
                     <span className="flex items-center">
                       <button onClick={() => StartTimer()}>
-                        <Image src="/static/icons/timer-icon.svg" layout="fixed" height={30} width={30} alt="" />
+                        <Timer />
                       </button>
                     </span>{' '}
                   </p>
@@ -146,10 +155,13 @@ const CookingStepPage = ({ slug }) => {
         <div className="fixed w-full bottom-6">
           <div className="flex justify-between w-10/12 mx-auto">
             <button onClick={() => prevStep()}>
-              <Image src="/static/icons/arrow-left-rounded-icon.svg" layout="fixed" height={40} width={40} alt="" />
+              <ArrowLeftRounded />
+            </button>
+            <button onClick={() => repeater()}>
+              <Repeat />
             </button>
             <button onClick={() => nextStep()}>
-              <Image src="/static/icons/arrow-right-rounded-icon.svg" layout="fixed" height={40} width={40} alt="" />
+              <ArrowRightRounded />
             </button>
           </div>
         </div>
