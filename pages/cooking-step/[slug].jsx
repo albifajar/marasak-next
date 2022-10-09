@@ -1,9 +1,12 @@
-import Head from 'next/head'
+import { useSpeechSynthesis } from 'react-speech-kit'
+import { useState, useRef, useEffect } from 'react'
 import { Container } from '@components/Layout'
-import Image from 'next/image'
-import Link from 'next/link'
-import { useState, useRef } from 'react'
 import Countdown from 'react-countdown'
+import Image from 'next/image'
+import Head from 'next/head'
+import Link from 'next/link'
+
+import { ArrowLeft, ArrowLeftRounded, ArrowRightRounded, Repeat } from '@components/Icons'
 
 const ListStep = [
   {
@@ -31,8 +34,11 @@ const ListStep = [
 
 const CookingStepPage = () => {
   const [currentStep, setCurrentStep] = useState(0)
+  const [changeStep, setChangeStep] = useState('')
+  const [repeatStep, setRepeatStep] = useState('')
   const countdownRef = useRef(null)
   const audioRef = useRef(null)
+  const { speak } = useSpeechSynthesis()
 
   const nextStep = () => {
     if (currentStep === ListStep.length - 1) {
@@ -75,6 +81,30 @@ const CookingStepPage = () => {
     countdownRef.current.start()
   }
 
+  const handleSpeak = () => {
+    speak({
+      default: true,
+      lang: 'id',
+      localService: true,
+      name: 'Karen',
+      voiceURI: 'Karen',
+      text: `${ListStep[currentStep].description}`
+    })
+  }
+
+  useEffect(() => {
+    handleSpeak()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [changeStep, repeatStep])
+
+  setTimeout(() => {
+    setChangeStep(ListStep[currentStep].description)
+  }, 1000)
+
+  const repeater = () => {
+    setRepeatStep(`${Math.random()}`)
+  }
+
   return (
     <div>
       <Head>
@@ -86,10 +116,10 @@ const CookingStepPage = () => {
         <div className="fixed w-full top-8">
           <Link href="/recipes/slug" passHref>
             <a className="flex justify-between w-11/12 mx-auto">
-              <div className="flex space-x-4">
+              <div className="flex items-center space-x-4">
                 <div>
-                  <Image src="/static/icons/arrow-left-icon.svg" layout="fixed" height={25} width={25} alt="" />
-                </div>{' '}
+                  <ArrowLeft />
+                </div>
                 <span className="-mt-0.5 text-xl">Selesai</span>{' '}
               </div>
             </a>
@@ -129,10 +159,13 @@ const CookingStepPage = () => {
         <div className="fixed w-full bottom-6">
           <div className="flex justify-between w-10/12 mx-auto">
             <button onClick={() => prevStep()}>
-              <Image src="/static/icons/arrow-left-rounded-icon.svg" layout="fixed" height={40} width={40} alt="" />
+              <ArrowLeftRounded />
+            </button>
+            <button onClick={() => repeater()}>
+              <Repeat />
             </button>
             <button onClick={() => nextStep()}>
-              <Image src="/static/icons/arrow-right-rounded-icon.svg" layout="fixed" height={40} width={40} alt="" />
+              <ArrowRightRounded />
             </button>
           </div>
         </div>

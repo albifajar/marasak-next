@@ -57,3 +57,51 @@ export const SearchIcon = ({ width = '24', height = '24', color = 'black', strok
     />
   </svg>
 )
+
+export const ArrowLeftRounded = ({ width = '38', height = '38', color = 'black', strokeWidth = '1' }) => (
+  <svg width={width} height={height} viewBox="0 0 38 38" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path
+      d="M17.5 13L11.5 19M11.5 19L17.5 25M11.5 19H26.5M37 19C37 21.3638 36.5344 23.7044 35.6298 25.8883C34.7252 28.0722 33.3994 30.0565 31.7279 31.7279C30.0565 33.3994 28.0722 34.7252 25.8883 35.6298C23.7044 36.5344 21.3638 37 19 37C16.6362 37 14.2956 36.5344 12.1117 35.6298C9.92784 34.7252 7.94353 33.3994 6.27208 31.7279C4.60062 30.0565 3.27475 28.0722 2.37017 25.8883C1.46558 23.7044 1 21.3638 1 19C1 14.2261 2.89642 9.64773 6.27208 6.27208C9.64773 2.89642 14.2261 1 19 1C23.7739 1 28.3523 2.89642 31.7279 6.27208C35.1036 9.64773 37 14.2261 37 19Z"
+      stroke={color}
+      strokeWidth={strokeWidth}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  </svg>
+)
+
+export const ArrowRightRounded = ({ width = '38', height = '38', color = 'black', strokeWidth = '1' }) => (
+  <svg width={width} height={height} viewBox="0 0 39 39" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path
+      d="M20.9142 25.3096L26.8303 19.2269M26.8303 19.2269L20.7476 13.3108M26.8303 19.2269L11.8318 19.4352M1.33278 19.5811C1.29995 17.2175 1.73297 14.8706 2.60713 12.6744C3.48129 10.4782 4.77948 8.47568 6.42755 6.78117C8.07563 5.08666 10.0413 3.73335 12.2124 2.79852C14.3835 1.86368 16.7174 1.36563 19.081 1.3328C21.4446 1.29996 23.7915 1.73298 25.9877 2.60715C28.1839 3.48131 30.1864 4.77949 31.8809 6.42756C33.5754 8.07564 34.9288 10.0413 35.8636 12.2124C36.7984 14.3835 37.2965 16.7175 37.3293 19.081C37.3956 23.8545 35.563 28.4587 32.2345 31.8809C28.9061 35.3032 24.3545 37.263 19.5811 37.3293C14.8076 37.3956 10.2034 35.563 6.78116 32.2346C3.35894 28.9061 1.3991 24.3545 1.33278 19.5811Z"
+      stroke={color}
+      strokeWidth={strokeWidth}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  </svg>
+)
+
+export const Repeat = ({ width = '38', height = '38', color = 'black', strokeWidth = '1' }) => (
+  <svg width={width} height={height} viewBox="0 0 40 42" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path
+      d="M26.7051 16.359H35.0251V16.3573M4.97506 34.377V25.641M4.97506 25.641H13.2951M4.97339 25.641L10.2751 31.2113C11.9819 33.0035 14.108 34.2923 16.4397 34.9482C18.7714 35.6041 21.2264 35.6039 23.5579 34.9476C25.8895 34.2914 28.0154 33.0022 29.7221 31.2097C31.4287 29.4172 32.6558 27.1846 33.2801 24.7363M6.71839 17.2638C7.34266 14.8154 8.56978 12.5828 10.2764 10.7903C11.983 8.99778 14.1089 7.70861 16.4405 7.05237C18.7721 6.39612 21.2271 6.39593 23.5587 7.05181C25.8904 7.70769 28.0165 8.99653 29.7234 10.7888L35.0251 16.3573M35.0251 7.623V16.3555"
+      stroke={color}
+      strokeWidth={strokeWidth}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  </svg>
+)
+
+export const ArrowLeft = ({ width = '24', height = '22', color = 'black', strokeWidth = '1' }) => (
+  <svg width={width} height={height} viewBox="0 0 20 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path
+      d="M8.5 16.5L1 9M1 9L8.5 1.5M1 9H19"
+      stroke={color}
+      strokeWidth={strokeWidth}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  </svg>
+)
