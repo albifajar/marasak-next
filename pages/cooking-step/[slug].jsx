@@ -2,41 +2,56 @@ import Head from 'next/head'
 import { Container } from '@components/Layout'
 import Image from 'next/image'
 import Link from 'next/link'
-import { useState, useRef } from 'react'
+import { fetcher } from '@services/fetcher'
+import { useState, useRef, useEffect } from 'react'
 import Countdown from 'react-countdown'
 
-const ListStep = [
-  {
-    description: 'Potong sosis yang sudah disiapkan ',
-    timer: 0
-  },
-  {
-    description: 'Potong sosis  bagian yang pipih',
-    timer: 0
-  },
-  {
-    description: 'Potong sosis yang sudah disiapkan menjadi bagian yang pipih',
-    timer: 0
-  },
-  {
-    description: 'Potong sosis yang sudah disiapkan menjadi bagian yang pipih jadi bagian yang pipi',
-    timer: 0
-  },
-  {
-    description:
-      'Potong sosis yang sudah disiapkan menjadi bagian yang pipih  sosis yang sudah disiapkan menjadi bagian yang pipih',
-    timer: 8000
-  }
-]
+// const ListStep = [
+//   {
+//     description: 'Potong sosis yang sudah disiapkan ',
+//     timer: 0
+//   },
+//   {
+//     description: 'Potong sosis  bagian yang pipih',
+//     timer: 0
+//   },
+//   {
+//     description: 'Potong sosis yang sudah disiapkan menjadi bagian yang pipih',
+//     timer: 0
+//   },
+//   {
+//     description: 'Potong sosis yang sudah disiapkan menjadi bagian yang pipih jadi bagian yang pipi',
+//     timer: 0
+//   },
+//   {
+//     description:
+//       'Potong sosis yang sudah disiapkan menjadi bagian yang pipih  sosis yang sudah disiapkan menjadi bagian yang pipih',
+//     timer: 8000
+//   }
+// ]
 
-const CookingStepPage = () => {
+const CookingStepPage = ({ slug }) => {
   const [currentStep, setCurrentStep] = useState(0)
   const countdownRef = useRef(null)
   const audioRef = useRef(null)
 
+  const [steps, setSteps] = useState([])
+
+  const getRecipe = () => {
+    fetcher(process.env.API_URL + '/recipes/' + slug + '?populate=deep').then((data) =>
+      setSteps(data?.data?.attributes?.steps)
+    )
+  }
+
+  console.log(currentStep)
+  useEffect(() => {
+    getRecipe()
+    return
+  }, [])
+
   const nextStep = () => {
-    if (currentStep === ListStep.length - 1) {
-      setCurrentStep(ListStep.length - 1)
+    if (currentStep === steps.length - 1) {
+      setCurrentStep(steps.length - 1)
     } else {
       const nextIndex = currentStep + 1
       setCurrentStep(nextIndex)
@@ -84,7 +99,7 @@ const CookingStepPage = () => {
       </Head>
       <main className="pt-6 pb-12 h-[100vh] flex flex-col justify-center">
         <div className="fixed w-full top-8">
-          <Link href="/recipes/slug" passHref>
+          <Link href={`/recipes/${slug}`} passHref>
             <a className="flex justify-between w-11/12 mx-auto">
               <div className="flex space-x-4">
                 <div>
@@ -100,31 +115,33 @@ const CookingStepPage = () => {
           Your browser does not support the audio element.
         </audio>
         <Container>
-          <div className="flex flex-col justify-center w-full h-full">
-            <div className="p-5 border-2 border-black rounded-md">
-              <p>
-                <span className="mr-2">{currentStep + 1}.</span>
-                <span>{ListStep[currentStep].description}</span>
-              </p>
-              {ListStep[currentStep].timer > 0 && (
-                <p className="flex items-center justify-end space-x-2 font-bold text-red-500">
-                  <span>
-                    <Countdown
-                      ref={countdownRef}
-                      date={Date.now() + ListStep[currentStep].timer}
-                      autoStart={false}
-                      renderer={renderer}
-                    />
-                  </span>
-                  <span className="flex items-center">
-                    <button onClick={() => StartTimer()}>
-                      <Image src="/static/icons/timer-icon.svg" layout="fixed" height={30} width={30} alt="" />
-                    </button>
-                  </span>{' '}
+          {steps.length != 0 && (
+            <div className="flex flex-col justify-center w-full h-full">
+              <div className="p-5 border-2 border-black rounded-md">
+                <p>
+                  <span className="mr-2">{currentStep + 1}.</span>
+                  <span>{steps[currentStep].description}</span>
                 </p>
-              )}
+                {steps[currentStep].timer > 0 && (
+                  <p className="flex items-center justify-end space-x-2 font-bold text-red-500">
+                    <span>
+                      <Countdown
+                        ref={countdownRef}
+                        date={Date.now() + steps[currentStep].timer}
+                        autoStart={false}
+                        renderer={renderer}
+                      />
+                    </span>
+                    <span className="flex items-center">
+                      <button onClick={() => StartTimer()}>
+                        <Image src="/static/icons/timer-icon.svg" layout="fixed" height={30} width={30} alt="" />
+                      </button>
+                    </span>{' '}
+                  </p>
+                )}
+              </div>
             </div>
-          </div>
+          )}
         </Container>
         <div className="fixed w-full bottom-6">
           <div className="flex justify-between w-10/12 mx-auto">
@@ -139,6 +156,16 @@ const CookingStepPage = () => {
       </main>
     </div>
   )
+}
+
+export const getServerSideProps = async (ctx) => {
+  const query = ctx.query
+
+  return {
+    props: {
+      slug: query?.slug
+    }
+  }
 }
 
 export default CookingStepPage

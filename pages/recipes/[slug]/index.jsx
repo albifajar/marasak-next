@@ -1,9 +1,22 @@
 import Head from 'next/head'
+import { useState, useEffect } from 'react'
+import { fetcher } from '@services/fetcher'
 import { Container } from '@components/Layout'
 import Image from 'next/image'
 import Link from 'next/link'
 
-const RecipeDetail = () => {
+const RecipeDetail = ({ slug }) => {
+  const [recipe, setRecipe] = useState({})
+
+  const getRecipe = () => {
+    fetcher(process.env.API_URL + '/recipes/' + slug + '?populate=deep').then((data) => setRecipe(data?.data))
+  }
+
+  console.log(recipe)
+  useEffect(() => {
+    getRecipe()
+    return
+  }, [])
   return (
     <div>
       <Head>
@@ -25,25 +38,26 @@ const RecipeDetail = () => {
           </Link>
           <div className="flex flex-col space-y-4">
             <div className="relative w-full h-[13rem] mt-6">
+              {/* to do make default image when image is null */}
               <Image
-                src="/static/images/example-food-image.jpg"
+                src={`${
+                  recipe?.attributes?.thumbnail?.data?.attributes?.url
+                    ? recipe?.attributes?.thumbnail?.data?.attributes?.url
+                    : '/static/images/default-image-not-found.png'
+                }`}
                 layout="fill"
                 className="object-cover object-center"
                 alt=""
               />
             </div>
-            <h1 className="text-2xl font-bold">Vegetable With Sosis Wenak by Sumedang Food</h1>
-            <p>
-              Masakan ini merupakan masakan sehat dengan bahan - bahan yang sehat bagi tubuh karena banyak menggunakan
-              sayuran
-            </p>
+            <h1 className="text-2xl font-bold">{recipe?.attributes?.title}</h1>
+            <p>{recipe?.attributes?.description}</p>
             <div>
               <h2 className="text-lg font-semibold">Bahan :</h2>
               <ol className="pl-5 list-disc">
-                <li>1 Bungkus Sosis</li>
-                <li>1kg terigu</li>
-                <li>5 lembar selada</li>
-                <li>1 sachet saus tiram</li>
+                {recipe?.attributes?.ingredients.map((ingredient) => (
+                  <li key={Math.random()}>{ingredient?.title}</li>
+                ))}
               </ol>
             </div>
             <div>
@@ -57,23 +71,22 @@ const RecipeDetail = () => {
             <div>
               <h2 className="text-lg font-semibold">Langkah - langkah :</h2>
               <ol className="pl-5 list-decimal">
-                <li>Potong sosis</li>
-                <li>Buat adonan terigu</li>
-                <li>Iris Sayuran</li>
-                <li>Masukan sayuran dan sosis ke adonan terigu</li>
-                <li>Panaskan minyak</li>
-                <li className="flex space-x-2">
-                  <span>Goreng selama 3 menit</span>{' '}
-                  <span className="flex items-center">
-                    <Image src="/static/icons/timer-icon.svg" layout="fixed" height={20} width={20} alt="" />
-                  </span>
-                </li>
+                {recipe?.attributes?.steps.map((step) => (
+                  <li key={Math.random()}>
+                    <span className="mr-4">{step?.description}</span>
+                    {step?.timer > 0 && (
+                      <span className="flex items-center">
+                        <Image src="/static/icons/timer-icon.svg" layout="fixed" height={20} width={20} alt="" />
+                      </span>
+                    )}
+                  </li>
+                ))}
               </ol>
             </div>
           </div>
 
           <div className="flex justify-center mt-12">
-            <Link href="/cooking-step/slug" passHref>
+            <Link href={`/cooking-step/${recipe?.attributes?.slug}`} passHref>
               <a>
                 <button className="px-5 py-3 text-white bg-blue-600 rounded-md">Mulai Memasak</button>
               </a>
@@ -83,6 +96,16 @@ const RecipeDetail = () => {
       </main>
     </div>
   )
+}
+
+export const getServerSideProps = async (ctx) => {
+  const query = ctx.query
+
+  return {
+    props: {
+      slug: query?.slug
+    }
+  }
 }
 
 export default RecipeDetail
