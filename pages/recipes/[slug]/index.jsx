@@ -5,9 +5,11 @@ import { Container } from '@components/Layout'
 import Image from 'next/image'
 import Link from 'next/link'
 import { ArrowLeft, Timer } from '@components/Icons'
+import SpeechRecognition from 'react-speech-recognition'
 
 const RecipeDetail = ({ slug }) => {
   const [recipe, setRecipe] = useState({})
+  SpeechRecognition.stopListening()
 
   const getRecipe = () => {
     fetcher(process.env.API_URL + '/recipes/' + slug + '?populate=deep').then((data) => setRecipe(data?.data))

@@ -6,14 +6,21 @@ import Head from 'next/head'
 import Link from 'next/link'
 import { ArrowLeft, ArrowLeftRounded, ArrowRightRounded, Repeat, Timer } from '@components/Icons'
 import { fetcher } from '@services/fetcher'
+import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition'
 
 const CookingStepPage = ({ slug }) => {
   const [currentStep, setCurrentStep] = useState(0)
   const [changeStep, setChangeStep] = useState('')
   const [repeatStep, setRepeatStep] = useState('')
+  const [command, setCommand] = useState('')
   const countdownRef = useRef(null)
   const audioRef = useRef(null)
-  const { speak } = useSpeechSynthesis()
+  const [isSpeak, setIsSpeak] = useState(true)
+  const { speak, speaking } = useSpeechSynthesis({
+    onEnd: () => {
+      setIsSpeak(false)
+    }
+  })
 
   const [steps, setSteps] = useState([])
 
@@ -23,7 +30,7 @@ const CookingStepPage = ({ slug }) => {
     )
   }
 
-  console.log(currentStep)
+  // console.log(currentStep)
   useEffect(() => {
     getRecipe()
     return
@@ -31,6 +38,7 @@ const CookingStepPage = ({ slug }) => {
   }, [])
 
   const nextStep = () => {
+    setIsSpeak(true)
     if (currentStep === steps.length - 1) {
       setCurrentStep(steps.length - 1)
     } else {
@@ -40,6 +48,7 @@ const CookingStepPage = ({ slug }) => {
   }
 
   const prevStep = () => {
+    setIsSpeak(true)
     if (currentStep === 0) {
       setCurrentStep(0)
     } else {
@@ -82,6 +91,7 @@ const CookingStepPage = ({ slug }) => {
         text: `${steps[currentStep].description}`
       })
     }
+    SpeechRecognition.stopListening()
   }
 
   useEffect(() => {
@@ -96,8 +106,40 @@ const CookingStepPage = ({ slug }) => {
   }, 1000)
 
   const repeater = () => {
+    setIsSpeak(true)
     setRepeatStep(`${Math.random()}`)
   }
+
+  const { transcript, resetTranscript } = useSpeechRecognition()
+
+  useEffect(() => {
+    if (isSpeak !== true) {
+      SpeechRecognition.startListening({
+        continuous: true,
+        language: 'id'
+      })
+      console.log('listening Start...')
+    }
+  }, [isSpeak])
+
+  const allWords = transcript.split(' ')
+
+  useEffect(() => {
+    if (command === 'lanjut') {
+      nextStep()
+    } else if (command === 'ulangi') {
+      repeater()
+    } else if (command === 'kembali') {
+      prevStep()
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [command])
+
+  useEffect(() => {
+    setCommand(allWords[allWords.length - 1])
+  }, [allWords])
+
+  console.log(command)
 
   return (
     <div>
@@ -154,13 +196,13 @@ const CookingStepPage = ({ slug }) => {
         </Container>
         <div className="fixed w-full bottom-6">
           <div className="flex justify-between w-10/12 mx-auto">
-            <button onClick={() => prevStep()}>
+            <button onClick={() => prevStep()} disabled={isSpeak}>
               <ArrowLeftRounded />
             </button>
-            <button onClick={() => repeater()}>
+            <button onClick={() => repeater()} disabled={isSpeak}>
               <Repeat />
             </button>
-            <button onClick={() => nextStep()}>
+            <button onClick={() => nextStep()} disabled={isSpeak}>
               <ArrowRightRounded />
             </button>
           </div>
