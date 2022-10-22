@@ -9,9 +9,13 @@ import Link from 'next/link'
 
 const HomePage = () => {
   const [recipes, setRecipes] = useState([])
+  const [isLoading, setIsLoading] = useState(false)
 
   const getRecipes = () => {
-    fetcher(process.env.API_URL + '/recipes?populate=*').then((data) => setRecipes(data?.data))
+    setIsLoading(true)
+    fetcher(process.env.API_URL + '/recipes?populate=*')
+      .then((data) => setRecipes(data?.data))
+      .then(() => setIsLoading(false))
   }
 
   useEffect(() => {
@@ -30,21 +34,25 @@ const HomePage = () => {
           <div className="pt-10 pb-20">
             <h1 className="mb-4 text-xl font-bold text-center">Logo</h1>
             <Search onSearch={(e) => setRecipes(e)} />
-            <div className="grid grid-cols-2 gap-3 mt-6">
-              {recipes.map((recipe) => (
-                <div key={Math.random()}>
-                  <Link href={`/recipes/${recipe?.attributes?.slug}`} passHref>
-                    <a>
-                      <Card
-                        url_image={recipe?.attributes?.thumbnail?.data?.attributes.url}
-                        type={recipe?.attributes?.type}
-                        title={recipe?.attributes?.title}
-                      />
-                    </a>
-                  </Link>
-                </div>
-              ))}
-            </div>
+            {isLoading ? (
+              <h1 className="mt-4 text-center">Mengambil Data..</h1>
+            ) : (
+              <div className="grid grid-cols-2 gap-3 mt-6 md:grid-cols-4">
+                {recipes.map((recipe) => (
+                  <div key={Math.random()}>
+                    <Link href={`/recipes/${recipe?.attributes?.slug}`} passHref>
+                      <a>
+                        <Card
+                          url_image={recipe?.attributes?.thumbnail?.data?.attributes.url}
+                          type={recipe?.attributes?.type}
+                          title={recipe?.attributes?.title}
+                        />
+                      </a>
+                    </Link>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         </Container>
         <BottomMenu />
