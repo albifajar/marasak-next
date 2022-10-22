@@ -1,19 +1,26 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { fetcher } from '@services/fetcher'
 import { MicrophoneIcon, SearchIcon } from '@components/Icons'
 import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition'
 
 export const Search = ({ onSearch }) => {
   const { transcript, listening } = useSpeechRecognition()
+  const [keyword, setKeyword] = useState('')
 
-  const searchRecipes = () => {
-    fetcher(process.env.API_URL + '/recipes?populate[thumbnail]=true&search=' + transcript).then((data) =>
+  const searchRecipes = (keyword_params) => {
+    fetcher(process.env.API_URL + '/recipes?populate[thumbnail]=true&search=' + keyword_params).then((data) =>
       onSearch(data?.data)
     )
+  }
+  const handleSubmit = (e) => {
+    if (e.code === 'Enter') {
+      searchRecipes(keyword)
+    }
   }
 
   useEffect(() => {
     if (listening === false && transcript != '') {
+      setKeyword(transcript)
       searchRecipes(transcript)
     }
     return
@@ -27,7 +34,9 @@ export const Search = ({ onSearch }) => {
         </button>
         <input
           type="text"
-          defaultValue={transcript}
+          value={keyword}
+          onChange={(e) => setKeyword(e.target.value)}
+          onKeyPress={(e) => handleSubmit(e)}
           className="w-full px-12 py-3 border border-gray-400 rounded-md focus:border-blue-200"
         />
         <button className="absolute right-2" onClick={() => SpeechRecognition.startListening({ language: 'id' })}>
