@@ -23,7 +23,8 @@
     "react-speech-recognition": "^3.9.1",
     "regenerator-runtime": "^0.13.9",
     "sass": "^1.55.0",
-    "tailwind-filter-utilities": "^2.0.0"
+    "tailwind-filter-utilities": "^2.0.0",
+    "yet-another-react-lightbox": "^2.2.0"
   },
   "devDependencies": {
     "autoprefixer": "^10.4.12",
