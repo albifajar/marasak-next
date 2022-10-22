@@ -13,7 +13,7 @@ export const Search = ({ onSearch }) => {
     )
   }
   const handleSubmit = (e) => {
-    if (e.code === 'Enter') {
+    if (e.code === 'Enter' || '13') {
       searchRecipes(keyword)
     }
   }
