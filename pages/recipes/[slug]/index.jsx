@@ -6,8 +6,13 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { ArrowLeft, Timer } from '@components/Icons'
 import SpeechRecognition from 'react-speech-recognition'
+import Lightbox from 'yet-another-react-lightbox'
+import Thumbnails from 'yet-another-react-lightbox/plugins/thumbnails'
+import 'yet-another-react-lightbox/styles.css'
+import 'yet-another-react-lightbox/plugins/thumbnails.css'
 
 const RecipeDetail = ({ slug }) => {
+  const [open, setOpen] = useState(false)
   const [recipe, setRecipe] = useState({})
   SpeechRecognition.stopListening()
 
@@ -15,7 +20,13 @@ const RecipeDetail = ({ slug }) => {
     fetcher(process.env.API_URL + '/recipes/' + slug + '?populate=deep').then((data) => setRecipe(data?.data))
   }
 
-  console.log(recipe)
+  const listImage = recipe?.attributes?.images?.data || []
+  const multiImage = []
+
+  listImage.map((data) => {
+    multiImage.push({ src: data?.attributes?.url })
+  })
+
   useEffect(() => {
     getRecipe()
     return
@@ -30,7 +41,7 @@ const RecipeDetail = ({ slug }) => {
       </Head>
       <main className="pt-6 pb-12">
         <Container>
-          <Link href="/recipes" passHref>
+          <Link href="/" passHref>
             <a>
               <div className="flex space-x-4">
                 <div>
@@ -40,8 +51,12 @@ const RecipeDetail = ({ slug }) => {
               </div>
             </a>
           </Link>
+          {multiImage.length < 2 && <Lightbox open={open} close={() => setOpen(false)} slides={multiImage} />}
+          {multiImage.length > 1 && (
+            <Lightbox open={open} close={() => setOpen(false)} slides={multiImage} plugins={[Thumbnails]} />
+          )}
           <div className="flex flex-col space-y-4">
-            <div className="relative w-full h-[13rem] mt-6">
+            <div className="relative w-full h-[13rem] mt-6" onClick={() => setOpen(true)}>
               {/* to do make default image when image is null */}
               <Image
                 src={`${
