@@ -15,9 +15,8 @@ export const Search = ({ onSearch }) => {
       .then(() => setIsLoading(false))
   }
   const handleSubmit = (e) => {
-    if (e.code === 'Enter') {
-      searchRecipes(keyword)
-    }
+    e.preventDefault()
+    searchRecipes(keyword)
   }
   useEffect(() => {
     if (listening === false && transcript != '') {
@@ -39,13 +38,15 @@ export const Search = ({ onSearch }) => {
             <SearchIcon />
           )}
         </button>
-        <input
-          type="text"
-          value={keyword}
-          onChange={(e) => setKeyword(e.target.value)}
-          onKeyPress={(e) => handleSubmit(e)}
-          className="w-full px-12 py-3 border border-gray-400 rounded-md focus:border-blue-200"
-        />
+        <form action="" onSubmit={(e) => handleSubmit(e)} className="w-full">
+          <input
+            type="text"
+            value={keyword}
+            onChange={(e) => setKeyword(e.target.value)}
+            // onKeyPress={(e) => handleSubmit(e)}
+            className="w-full px-12 py-3 border border-gray-400 rounded-md focus:border-blue-200"
+          />
+        </form>
         <button className="absolute right-2" onClick={() => SpeechRecognition.startListening({ language: 'id' })}>
           <MicrophoneIcon color={listening ? 'red' : 'black'} />
         </button>
