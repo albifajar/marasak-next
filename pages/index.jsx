@@ -3,9 +3,10 @@ import { useState, useEffect } from 'react'
 import { fetcher } from '@services/fetcher'
 import { Search } from '@components/Forms'
 import { Container } from '@components/Layout'
-import { BottomMenu } from '@components/Footer'
+// import { BottomMenu } from '@components/Footer'
 import { DefaultCard as Card } from '@components/Card'
 import Link from 'next/link'
+import { Header } from '@components/Header'
 
 const HomePage = () => {
   const [recipes, setRecipes] = useState([])
@@ -31,8 +32,10 @@ const HomePage = () => {
       </Head>
       <main>
         <Container>
+          <div className="mt-4">
+            <Header />
+          </div>
           <div className="pt-10 pb-20">
-            <h1 className="mb-4 text-xl font-bold text-center">Logo</h1>
             <Search onSearch={(e) => setRecipes(e)} />
             {isLoading ? (
               <h1 className="mt-4 text-center">Mengambil Data..</h1>
@@ -55,7 +58,7 @@ const HomePage = () => {
             )}
           </div>
         </Container>
-        <BottomMenu />
+        {/* <BottomMenu /> */}
       </main>
     </div>
   )
