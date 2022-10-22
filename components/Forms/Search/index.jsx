@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { fetcher } from '@services/fetcher'
-import { MicrophoneIcon, SearchIcon } from '@components/Icons'
+import { NewMicrophoneIcon, NewSearchIcon } from '@components/Icons'
 import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition'
 
 export const Search = ({ onSearch }) => {
@@ -29,13 +29,13 @@ export const Search = ({ onSearch }) => {
   return (
     <>
       <div className="relative flex items-center text-black">
-        <button className="absolute left-4">
+        <button className="absolute left-6">
           {isLoading ? (
             <div className="animate-spin">
               <div className="w-6 h-6 border-t-2 border-b-2 border-l-2 border-gray-500 rounded-full" />
             </div>
           ) : (
-            <SearchIcon />
+            <NewSearchIcon />
           )}
         </button>
         <form action="" onSubmit={(e) => handleSubmit(e)} className="w-full">
@@ -44,11 +44,12 @@ export const Search = ({ onSearch }) => {
             value={keyword}
             onChange={(e) => setKeyword(e.target.value)}
             // onKeyPress={(e) => handleSubmit(e)}
-            className="w-full px-12 py-3 border border-gray-400 rounded-md focus:border-blue-200"
+            className="w-full py-3 bg-gray-100 border border-white rounded-full px-14 focus:border-blue-200"
+            placeholder="Search"
           />
         </form>
-        <button className="absolute right-2" onClick={() => SpeechRecognition.startListening({ language: 'id' })}>
-          <MicrophoneIcon color={listening ? 'red' : 'black'} />
+        <button className="absolute right-6" onClick={() => SpeechRecognition.startListening({ language: 'id' })}>
+          <NewMicrophoneIcon color={listening ? 'red' : '#9496A1'} />
         </button>
       </div>
     </>
