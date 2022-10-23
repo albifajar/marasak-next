@@ -49,6 +49,8 @@ const HomePage = () => {
                           url_image={recipe?.attributes?.thumbnail?.data?.attributes.url}
                           type={recipe?.attributes?.type}
                           title={recipe?.attributes?.title}
+                          lessIngredient={recipe?.attributes?.lessIngredient}
+                          cookingTime={recipe?.attributes?.cookingTime}
                         />
                       </a>
                     </Link>
