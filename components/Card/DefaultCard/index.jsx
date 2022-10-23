@@ -22,7 +22,7 @@ export const DefaultCard = ({ url_image, type, title, lessIngredient, cookingTim
             <Image src="/static/icons/fluent_timer-24-regular.svg" width={14} height={14} layout="fixed" alt="" />
             <p className="text-sm">Estimasi {cookingTime}</p>
           </div>
-          <div className="items-center hidden px-2 py-1 space-x-2 bg-red-100 rounded-full w-max">
+          <div className="flex items-center px-2 py-1 space-x-2 bg-red-100 rounded-full w-max">
             <Image src="/static/icons/ic_outline-no-food.svg" width={14} height={14} layout="fixed" alt="" />
             <p className="text-sm">Kurang {lessIngredient} bahan</p>
           </div>
