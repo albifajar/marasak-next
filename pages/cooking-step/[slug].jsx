@@ -4,7 +4,7 @@ import { Container } from '@components/Layout'
 import Countdown from 'react-countdown'
 import Head from 'next/head'
 import Link from 'next/link'
-import { ArrowLeft, ArrowLeftRounded, ArrowRightRounded, Repeat, Timer } from '@components/Icons'
+import { ArrowLeft, ArrowLeftRounded, ArrowRightRounded, Repeat, PlayIcon, StopIcon } from '@components/Icons'
 import { fetcher } from '@services/fetcher'
 import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition'
 
@@ -13,6 +13,7 @@ const CookingStepPage = ({ slug }) => {
   const [changeStep, setChangeStep] = useState('')
   const [repeatStep, setRepeatStep] = useState('')
   const [command, setCommand] = useState('')
+  const [isPlay, setIsPlay] = useState(false)
   const countdownRef = useRef(null)
   const audioRef = useRef(null)
   const [isSpeak, setIsSpeak] = useState(true)
@@ -58,7 +59,7 @@ const CookingStepPage = ({ slug }) => {
   }
 
   // Random component
-  const Completionist = () => <span>Selesai ayo cek masakanmu</span>
+  const Completionist = () => <p className="text-center">Selesai ayo cek masakanmu</p>
 
   // Renderer callback with condition
   const renderer = ({ hours, minutes, seconds, completed }) => {
@@ -77,7 +78,13 @@ const CookingStepPage = ({ slug }) => {
   }
 
   const StartTimer = () => {
+    setIsPlay(true)
     countdownRef.current.start()
+  }
+
+  const PauseTimer = () => {
+    setIsPlay(false)
+    countdownRef.current.pause()
   }
 
   const handleSpeak = () => {
@@ -168,27 +175,35 @@ const CookingStepPage = ({ slug }) => {
         <Container>
           {steps.length != 0 && (
             <div className="flex flex-col justify-center w-full h-full">
-              <div className="p-5 border-2 border-black rounded-md">
-                <p>
-                  <span className="mr-2">{currentStep + 1}.</span>
-                  <span>{steps[currentStep].description}</span>
+              <div className="p-5">
+                <h1 className="mb-4 text-xl font-semibold text-center">Langkah ke {currentStep + 1}</h1>
+                <p className="text-center">
+                  <span>&quot; {steps[currentStep].description} &quot;</span>
                 </p>
                 {steps[currentStep].timer > 0 && (
-                  <p className="flex items-center justify-end space-x-2 font-bold text-red-500">
-                    <span>
-                      <Countdown
-                        ref={countdownRef}
-                        date={Date.now() + steps[currentStep].timer}
-                        autoStart={false}
-                        renderer={renderer}
-                      />
-                    </span>
-                    <span className="flex items-center">
-                      <button onClick={() => StartTimer()}>
-                        <Timer />
-                      </button>
+                  <div className="flex flex-col items-center mt-8">
+                    <p className="text-3xl font-semibold">
+                      <span>
+                        <Countdown
+                          ref={countdownRef}
+                          date={Date.now() + steps[currentStep].timer}
+                          autoStart={false}
+                          renderer={renderer}
+                        />
+                      </span>
+                    </p>
+                    <span className="flex items-center mt-8">
+                      {isPlay ? (
+                        <button onClick={() => PauseTimer()}>
+                          <StopIcon />
+                        </button>
+                      ) : (
+                        <button onClick={() => StartTimer()}>
+                          <PlayIcon />
+                        </button>
+                      )}
                     </span>{' '}
-                  </p>
+                  </div>
                 )}
               </div>
             </div>

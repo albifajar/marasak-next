@@ -3,13 +3,13 @@
   "short_name": "Marasak",
   "icons": [
     {
-      "src": "/static/icons/icon2-192x192.png",
+      "src": "/static/icons/icon3-192x192.png",
       "sizes": "192x192",
       "type": "image/png"
     },
 
     {
-      "src": "/static/icons/icon2-512x512.png",
+      "src": "/static/icons/icon3-512x512.png",
       "sizes": "512x512",
       "type": "image/png"
     }

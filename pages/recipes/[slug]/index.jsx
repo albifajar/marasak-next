@@ -1,5 +1,5 @@
 import Head from 'next/head'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, Fragment } from 'react'
 import { fetcher } from '@services/fetcher'
 import { Container } from '@components/Layout'
 import Image from 'next/image'
@@ -10,11 +10,22 @@ import Lightbox from 'yet-another-react-lightbox'
 import Thumbnails from 'yet-another-react-lightbox/plugins/thumbnails'
 import 'yet-another-react-lightbox/styles.css'
 import 'yet-another-react-lightbox/plugins/thumbnails.css'
+import { Dialog, Transition } from '@headlessui/react'
 
 const RecipeDetail = ({ slug }) => {
   const [open, setOpen] = useState(false)
+  const [infoCooking, setInfoCooking] = useState(false)
   const [recipe, setRecipe] = useState({})
+  const [activeTab, setActiveTab] = useState('bahan')
   SpeechRecognition.stopListening()
+
+  const closeModal = () => {
+    setInfoCooking(false)
+  }
+
+  const openModal = () => {
+    setInfoCooking(true)
+  }
 
   const getRecipe = () => {
     fetcher(process.env.API_URL + '/recipes/' + slug + '?populate=deep').then((data) => setRecipe(data?.data))
@@ -32,6 +43,7 @@ const RecipeDetail = ({ slug }) => {
     return
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
+
   return (
     <div>
       <Head>
@@ -58,59 +70,119 @@ const RecipeDetail = ({ slug }) => {
           <div className="flex flex-col space-y-4">
             <div className="relative w-full h-[13rem] mt-6" onClick={() => setOpen(true)}>
               {/* to do make default image when image is null */}
-              <Image
-                src={`${
-                  recipe?.attributes?.thumbnail?.data?.attributes?.url
-                    ? recipe?.attributes?.thumbnail?.data?.attributes?.url
-                    : '/static/images/default-image-not-found.png'
-                }`}
-                layout="fill"
-                className="object-cover object-center"
-                alt=""
-              />
+              {recipe?.attributes?.thumbnail?.data?.attributes?.url ? (
+                <Image
+                  src={`${
+                    recipe?.attributes?.thumbnail?.data?.attributes?.url
+                      ? recipe?.attributes?.thumbnail?.data?.attributes?.url
+                      : '/static/images/default-image-not-found.png'
+                  }`}
+                  layout="fill"
+                  className="object-cover object-center"
+                  alt=""
+                />
+              ) : (
+                <div className="w-full h-full bg-gray-300 animate-pulse" />
+              )}
             </div>
-            <h1 className="text-2xl font-bold">{recipe?.attributes?.title}</h1>
-            <p>{recipe?.attributes?.description}</p>
-            <div>
-              <h2 className="text-lg font-semibold">Bahan :</h2>
-              <ol className="pl-5 list-disc">
-                {recipe?.attributes?.ingredients.map((ingredient) => (
-                  <li key={Math.random()}>{ingredient?.title}</li>
-                ))}
-              </ol>
-            </div>
-            <div>
-              <h2 className="text-lg font-semibold">Rekomendasi Alat :</h2>
-              <ol className="pl-5 list-disc">
-                <li>Pisau</li>
-                <li>Kompor</li>
-                <li>Wajan</li>
-              </ol>
-            </div>
-            <div>
-              <h2 className="text-lg font-semibold">Langkah - langkah :</h2>
-              <ol className="pl-5 list-decimal">
-                {recipe?.attributes?.steps.map((step) => (
-                  <li key={Math.random()}>
-                    <span className="mr-4">{step?.description}</span>
-                    {step?.timer > 0 && (
-                      <span className="flex items-center">
-                        <Timer />
-                      </span>
-                    )}
-                  </li>
-                ))}
-              </ol>
+            <div className="-mt-8 rounded-t-md">
+              <h1 className="text-2xl font-bold">{recipe?.attributes?.title}</h1>
+              <p>{recipe?.attributes?.description}</p>
+              <div className="grid grid-cols-2 my-8 overflow-hidden rounded-full">
+                <div
+                  className={`py-2 text-center ${activeTab === 'bahan' ? 'text-white bg-gray-900' : 'bg-gray-300'} `}
+                  onClick={() => setActiveTab('bahan')}>
+                  Bahan
+                </div>
+                <div
+                  className={`py-2 text-center ${activeTab === 'langkah' ? 'text-white bg-gray-900' : 'bg-gray-300'}`}
+                  onClick={() => setActiveTab('langkah')}>
+                  Langkah
+                </div>
+              </div>
+              {activeTab === 'bahan' ? (
+                <>
+                  <div>
+                    <h2 className="text-lg font-semibold">Bahan :</h2>
+                    <ol className="pl-5 list-disc">
+                      {recipe?.attributes?.ingredients.map((ingredient) => (
+                        <li key={Math.random()}>{ingredient?.title}</li>
+                      ))}
+                    </ol>
+                  </div>
+                  <div>
+                    <h2 className="text-lg font-semibold">Rekomendasi Alat :</h2>
+                    <ol className="pl-5 list-disc">
+                      {recipe?.attributes?.tools.map((tool, i) => (
+                        <li key={i}>{tool?.title}</li>
+                      ))}
+                    </ol>
+                  </div>
+                </>
+              ) : (
+                <div>
+                  <h2 className="text-lg font-semibold">Langkah - langkah :</h2>
+                  <ol className="pl-5 list-decimal">
+                    {recipe?.attributes?.steps.map((step) => (
+                      <li key={Math.random()}>
+                        <span className="mr-4">{step?.description}</span>
+                        {step?.timer > 0 && (
+                          <span className="flex items-center">
+                            <Timer />
+                          </span>
+                        )}
+                      </li>
+                    ))}
+                  </ol>
+                </div>
+              )}
             </div>
           </div>
 
-          <div className="flex justify-center mt-12">
-            <Link href={`/cooking-step/${recipe?.attributes?.slug}`} passHref>
-              <a>
-                <button className="px-5 py-3 text-white bg-blue-600 rounded-md">Mulai Memasak</button>
-              </a>
-            </Link>
+          <div className="flex justify-center mt-12" onClick={openModal}>
+            <button className="px-5 py-3 text-white bg-black rounded-full">Mulai Memasak</button>
           </div>
+
+          <Transition appear show={infoCooking} as={Fragment}>
+            <Dialog as="div" className="relative z-10" onClose={closeModal}>
+              <Transition.Child
+                as={Fragment}
+                enter="ease-out duration-300"
+                enterFrom="opacity-0"
+                enterTo="opacity-100"
+                leave="ease-in duration-200"
+                leaveFrom="opacity-100"
+                leaveTo="opacity-0">
+                <div className="fixed inset-0 bg-black bg-opacity-25" />
+              </Transition.Child>
+
+              <div className="fixed inset-0 overflow-y-auto">
+                <div className="flex items-center justify-center min-h-full p-4 text-center">
+                  <Transition.Child
+                    as={Fragment}
+                    enter="ease-out duration-300"
+                    enterFrom="opacity-0 scale-95"
+                    enterTo="opacity-100 scale-100"
+                    leave="ease-in duration-200"
+                    leaveFrom="opacity-100 scale-100"
+                    leaveTo="opacity-0 scale-95">
+                    <Dialog.Panel className="w-full max-w-md p-6 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl rounded-2xl">
+                      <div className="mt-2">
+                        <p className="mb-6">
+                          Ucapkan &quot;Lanjut&quot; untuk langkah selanjutnya <br /> Ucapkan &quot;Kembali&quot; untuk ke
+                          langkah sebelumnya, <br /> Dan Ucapkan &quot;Ulangi&quot; untuk mengulang langkah <br />
+                          <br /> Ketika klik mulai sekarang, langkah memasak dimulai
+                        </p>
+                        <Link href={`/cooking-step/${recipe?.attributes?.slug}`} passHref>
+                          <a className="px-4 py-3 text-white bg-black rounded-full">Mulai Sekarang</a>
+                        </Link>
+                      </div>
+                    </Dialog.Panel>
+                  </Transition.Child>
+                </div>
+              </div>
+            </Dialog>
+          </Transition>
         </Container>
       </main>
     </div>
