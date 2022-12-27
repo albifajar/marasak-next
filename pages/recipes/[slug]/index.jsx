@@ -138,10 +138,10 @@ const RecipeDetail = ({ slug }) => {
               )}
             </div>
           </div>
-
+          {/* 
           <div className="flex justify-center mt-12" onClick={openModal}>
             <button className="px-5 py-3 text-white bg-black rounded-full">Mulai Memasak</button>
-          </div>
+          </div> */}
 
           <Transition appear show={infoCooking} as={Fragment}>
             <Dialog as="div" className="relative z-10" onClose={closeModal}>

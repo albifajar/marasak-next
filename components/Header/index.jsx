@@ -8,10 +8,7 @@ export const Header = () => {
   return (
     <>
       <div className="flex items-center justify-between">
-        <div className="relative w-[9rem] h-[2.25rem]">
-          {/* to do make default image when image is null */}
-          <Image src="/static/images/main-logo.png" layout="fill" alt="image" objectFit="contain" />
-        </div>
+        <div className="relative w-[9rem] h-[2.25rem]"></div>
         <div onClick={() => toggleMenu()}>
           <UserIcon width="30" height="30" />
         </div>
